@@ -1,57 +1,46 @@
 import React, { Component } from 'react'
 import "../../styles/loginform.css"
-import { Row, Col, Button } from 'react-bootstrap'
-import { reduxForm, Field } from 'redux-form'
-import { submit } from '../../actions/loginAction'
+import { Button, Form, FormGroup } from 'react-bootstrap'
+import LoginUserName from './LoginUserName'
+import LoginPassword from './LoginPassword'
 
 
- 
+
 class LoginFormComponent extends Component {
 
-    render() {
-        // const { error, handleSubmit, pristine, reset, submitting } = this.props
-        const { handleSubmit } = this.props
-        return (
-        
-            <form onSubmit={handleSubmit(submit)}>
-                <Row>
+    constructor(props) {
+        super(props)
+        console.log("Display", this.props);
+    }
 
-                    <Col md={2}></Col>
-                    <Col md={8}>
-                        <div className="loginFormDiv">
-                            
-                            <div>
-                                <label htmlFor="username">Username</label>
-                                <Field className="loginText" placeholder="username" name="username" component={renderInput} type="text" />
-                            </div>
-                            <div>
-                                <label htmlFor="password">Password</label>
-                                <Field className="loginText" placeholder="password" name="password" component={renderInput} type="password" />
-                            </div>
-                            <Button type="submit" className="loginSubmitButton">Submit</Button>
-                        </div>
-                    </Col>
-                    <Col md={2}></Col>
-                </Row>
-                
-            </form>
+    render() {
+        return (
+
+            // <Row>
+
+            //     <Col md={2}></Col>
+            //     <Col md={8}>
+            <Form>
+                <div className="loginFormDiv">
+                    <FormGroup><LoginUserName field={this.props.fields.username} handleChange={this.props.handleChange} handleBlur={this.props.handleBlur} /></FormGroup>
+                    <LoginPassword field={this.props.fields.password} handleChange={this.props.handleChange} handleBlur={this.props.handleBlur} />
+                    <Button type="submit" >Submit</Button>
+
+                </div>
+            </Form>
+
+            //     {/* </Col>
+            //     <Col md={2}></Col>
+            // </Row> */}
         )
     }
- 
-        
 
-    
-    
-    
+
+
+
+
+
 }
 
-const renderInput = field =>   // Define stateless component to render input and errors
-  <div>
-    <input {...field.input} type={field.type} placeholder={field.placeholder} className={field.className}/>  
-    {field.meta.touched &&
-     field.meta.error &&
-     <span className="error">{field.meta.error}</span>}
-  </div>
-export default reduxForm({
-    form: 'loginForm'
-})(LoginFormComponent)
+
+export default LoginFormComponent

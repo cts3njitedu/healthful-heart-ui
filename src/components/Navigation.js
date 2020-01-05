@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, NavItem, Nav } from 'react-bootstrap'
 import { Link, NavLink } from 'react-router-dom'
-
+import "../styles/header.css"
 function Navigation() {
   return (
     <div>
@@ -13,16 +13,16 @@ function Navigation() {
           </Navbar.Brand>
 
           <Nav>
-            <NavItem>
-              <Link to="/" exact>Home</Link>
+            <NavItem componentClass='span'>
+              <Link to="/" >Home</Link>
             </NavItem>
-            <NavItem>
+            <NavItem componentClass='span'>
               <Link to="/about" >About Page</Link>
             </NavItem>
           </Nav>
           <Nav pullRight>
-            <NavItem>
-              <Link to="/login" exact>Login</Link>
+            <NavItem componentClass='span'>
+              <Link to="/login">Login</Link>
             </NavItem>
           </Nav>
         </Navbar>

@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, Route } from 'react-router-dom'
 import About from './About'
 import LandingPage from './LandingPage'
-import LoginFormComponent from './components/forms/LoginFormComponent'
+import LoginFormContainer from './components/forms/LoginFormContainer'
 
 function App() {
     return (
@@ -15,9 +15,9 @@ function App() {
             <Provider store={store}>
                 <Header />
                 {/* <MainContent /> */}
-                <Route exact path="/" component={LandingPage} />
+                <Route exact={true} path="/" component={LandingPage} />
                 <Route path="/about" component={About} />
-                <Route path="/login" component={LoginFormComponent} />
+                <Route path="/login" component={LoginFormContainer} />
 
 
             </Provider>
