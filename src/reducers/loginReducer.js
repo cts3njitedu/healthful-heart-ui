@@ -1,4 +1,4 @@
-import { LOGIN_PAGE_BEGIN, LOGIN_PAGE_SUCCESS, LOGIN_PAGE_FAILURE, LOGIN_FORM_CHANGE } from "../actions/loginAction";
+import { LOGIN_PAGE_BEGIN, LOGIN_PAGE_SUCCESS, LOGIN_PAGE_FAILURE, LOGIN_FORM_CHANGE, LOGIN_FORM_VALIDATION_FINISH } from "../actions/loginAction";
 
 const initialState = {
   page: {
@@ -44,6 +44,23 @@ export default function loginFormReducer(state = initialState, action) {
             return {
               ...field,
               value: action.payload.field.value
+            }
+          })
+        }
+      }
+    case LOGIN_FORM_VALIDATION_FINISH:
+      return {
+        ...state,
+        page: {
+          ...state.page,
+          fields: state.page.fields.map((field,index) => {
+            if (field.id in action.payload.errorFields) {
+              return {
+                ...field,
+                errors: action.payload.errorFields[field.id]
+              }
+            } else {
+              return field;
             }
           })
         }

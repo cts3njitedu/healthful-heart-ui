@@ -45,14 +45,18 @@ function restructureSection(section, parentId, newPage, parentName) {
         Object.keys(section).forEach(function (key) {
             sectionPromises.push(new Promise(function (resolve) {
                 if (Array.isArray(section[key])) {
-                    if(section[key].length > 0){
+                    if (section[key].length > 0 && key !== "errors"){
                         fieldArrays.push(key);
+                    }
+                    if (key === "errors") {
+                        newSection = { ...newSection, [key]: section[key] }
                     }
                     
                 } else {
                     if (key === "sectionId" || key === "fieldId" || key === "validationId") {
                         newSection = { ...newSection, [key]: section[key]}
                         newSection = { ...newSection, id: parentId.concat(".").concat(section[key])}
+                        newSection = { ...newSection, parentId: parentId}
                     } else {
                         newSection = { ...newSection, [key]: section[key] }
                     }

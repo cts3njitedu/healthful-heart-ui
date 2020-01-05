@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getLoginPage, handleFormChange} from '../../actions/loginAction'
+import { getLoginPage, handleFormChange, handleFormBlur} from '../../actions/loginAction'
 import { connect } from 'react-redux'
 import LoginFormComponent from './LoginFormComponent';
 
@@ -9,6 +9,7 @@ class LoginFormContainer extends Component {
         super(props);
         this.handleChange = this.handleChange.bind(this)
         this.handleBlur = this.handleBlur.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
     componentDidMount() {
         this.props.getLoginPage();
@@ -23,8 +24,18 @@ class LoginFormContainer extends Component {
         })
     }
 
-    handleBlur() {
-        console.log("Left the textbox");
+    handleBlur(event) {
+        const {name, value, id} = event.target;
+        this.props.handleFormBlur({
+            name: name,
+            value: value,
+            id: id
+        });
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        console.log("Submitting form....");
     }
     render(){
         const { error, loading, fields } = this.props;
@@ -47,7 +58,8 @@ class LoginFormContainer extends Component {
                         <LoginFormComponent 
                             fields={newFields}
                             handleChange={this.handleChange}
-                            handleBlur={this.handleBlur} />
+                            handleBlur={this.handleBlur}
+                            handleSubmit={this.handleSubmit} />
                         
                 )
             }
@@ -77,7 +89,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
 
     getLoginPage,
-    handleFormChange
+    handleFormChange,
+    handleFormBlur
 
 }
 

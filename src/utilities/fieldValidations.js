@@ -1,30 +1,50 @@
 import { MANDATORY, LENGTH, REGEX } from "../constants/validations_constants";
 
-export function validate(field, newField) {
-    let validations = field.validations;
-    let newValue = newField[field.name];
-    let errors = {
-
-    };
-    errors[field.name] = [];
+export function tester() {
+    console.log("In tester");
+}
+export function validate(field, validations) {
+    let errorFields = [];
+    let promises = [];
+    let newValue = field.value;
     validations.forEach(validation => {
-       if (validation.validationName === MANDATORY ) {
-          if (newValue === null || newValue === undefined || newValue.trim().length === 0) {
-              errors[field.name] = [...errors[field.name], validation.message]
-          }
-       }
-       if (validation.validationName === LENGTH) {
-           if(newValue === null || newValue === undefined || newValue.length < validation.minLength || newValue.length > validation.maxLength) {
-               errors[field.name] = [...errors[field.name], validation.message]
-           }
-       }
-       if (validation.validationName === REGEX) {
-           let pattern = new RegExp(validation.regexValue);
-           if(!pattern.test(newValue)){
-                errors[field.name] = [...errors[field.name], validation.message]
-           }
-       }
-    });
+        promises.push(new Promise(function (resolve) {
+            if (validation.validationName === MANDATORY) {
+                if (newValue === null || newValue === undefined || newValue.trim().length === 0) {
+                    const error = {
+                        message: validation.message,
+                        parentId: validation.parentId
+                    }
+                    errorFields = errorFields.concat(error);
+                }
+            }
+            if (validation.validationName === LENGTH) {
+                if (newValue === null || newValue === undefined || newValue.length < field.minLength || newValue.length > field.maxLength) {
+                    const error = {
+                        message: validation.message,
+                        parentId: validation.parentId
+                    }
+                    errorFields = errorFields.concat(error);
+                    
+                }
+            }
+            if (validation.validationName === REGEX) {
+                let pattern = new RegExp(field.regexValue);
+                if (!pattern.test(newValue)) {
+                    const error = {
+                        message: validation.message,
+                        parentId: validation.parentId
+                    }
+                    errorFields = errorFields.concat(error);
+                   
+                }
+            }
+            resolve()
+        }))
+    })
 
-    return errors;
+    return Promise.all(promises).then(function(){
+        console.log("Inside validate", errorFields);
+        return errorFields
+    })
 }
