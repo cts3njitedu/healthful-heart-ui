@@ -2,7 +2,10 @@ import React from 'react'
 import { Navbar, NavItem, Nav } from 'react-bootstrap'
 import { Link, NavLink } from 'react-router-dom'
 import "../styles/header.css"
-function Navigation() {
+import { connect } from 'react-redux'
+function Navigation(props) {
+  const {isAccessTokenEnabled} = props
+  console.log("Navigation", isAccessTokenEnabled)
   return (
     <div>
       <div>
@@ -20,11 +23,14 @@ function Navigation() {
               <Link to="/about" >About Page</Link>
             </NavItem>
           </Nav>
-          <Nav pullRight>
+          {!isAccessTokenEnabled ?<Nav pullRight>
             <NavItem componentClass='span'>
               <Link to="/login">Login</Link>
-            </NavItem>
-          </Nav>
+            </NavItem> 
+            <NavItem componentClass='span'>
+              <Link to="/signup">Signup</Link>
+            </NavItem> 
+          </Nav>: null}
         </Navbar>
       </div>
 
@@ -34,5 +40,11 @@ function Navigation() {
 
 }
 
+function mapStateToProps(state) {
+  return {
 
-export default Navigation
+    isAccessTokenEnabled: state.user.isAccessTokenEnabled
+  }
+
+}
+export default connect(mapStateToProps, null)(Navigation);

@@ -9,7 +9,7 @@ export function validate(field, validations) {
     let newValue = field.value;
     validations.forEach(validation => {
         promises.push(new Promise(function (resolve) {
-            if (validation.validationName === MANDATORY) {
+            if (validation.validationName === MANDATORY && validation.isEnabled) {
                 if (newValue === null || newValue === undefined || newValue.trim().length === 0) {
                     const error = {
                         message: validation.message,
@@ -18,7 +18,7 @@ export function validate(field, validations) {
                     errorFields = errorFields.concat(error);
                 }
             }
-            if (validation.validationName === LENGTH) {
+            if (validation.validationName === LENGTH && validation.isEnabled) {
                 if (newValue === null || newValue === undefined || newValue.length < field.minLength || newValue.length > field.maxLength) {
                     const error = {
                         message: validation.message,
@@ -28,7 +28,7 @@ export function validate(field, validations) {
                     
                 }
             }
-            if (validation.validationName === REGEX) {
+            if (validation.validationName === REGEX && validation.isEnabled) {
                 let pattern = new RegExp(field.regexValue);
                 if (!pattern.test(newValue)) {
                     const error = {

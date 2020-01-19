@@ -1,14 +1,22 @@
-import { LOGIN_FORM_VALIDATION, handleFormValidationFinish } from "../actions/loginAction"
+import { LOGIN_FORM_VALIDATION, handleFormValidationFinish, LOGIN_FORM_SUBMIT_BEGIN, handleRequestBuilder } from "../actions/loginAction"
 import {validate} from "../utilities/fieldValidations"
 
-const validateForm = ({getState}) => next => action => {
-    if (action.type === LOGIN_FORM_VALIDATION) {
-        console.log("Have a nice day");
+const validateForm = ({dispatch, getState}) => next => action => {
+    if (action.type === LOGIN_FORM_SUBMIT_BEGIN) {
+        next(action)
+    }
+    if (action.type === LOGIN_FORM_VALIDATION || action.type === LOGIN_FORM_SUBMIT_BEGIN) {
+        console.log("Have a nice day", action.type);
         let {loginForm} = getState();
-        let field = action.payload.field;
-        let currentField = loginForm.page.fields.filter(f => f.id === field.id);
-        let sectionFields = loginForm.page.fields.filter(f => (f.parentId === currentField[0].parentId) && !f.isDisabled)
+        
+        let currentFields = action.payload.fields
+
+        let sectionFields = Object.keys(currentFields).map(function(key){
+            return currentFields[key];
+        })
+    
         let errors = {};
+        let isError = false;
         let promises = [];
         console.log(sectionFields);
         sectionFields.forEach(sectionField => {
@@ -16,6 +24,9 @@ const validateForm = ({getState}) => next => action => {
                 let validations = loginForm.page.validations.filter(v => v.parentId === sectionField.id);
                 let valid = validate(sectionField, validations);
                 valid.then(function(validationErrors){
+                    if (validationErrors.length > 0) {
+                        isError = true;
+                    }
                     errors = {...errors, [sectionField.id]: validationErrors }
                     resolve();
                 })
@@ -24,7 +35,14 @@ const validateForm = ({getState}) => next => action => {
         })
 
         Promise.all(promises).then(function(){
-            next(handleFormValidationFinish(errors))
+            if (isError || action.type === LOGIN_FORM_VALIDATION) {
+                console.log("Login form validation returen")
+                next(handleFormValidationFinish(errors, isError))
+            } else {
+                dispatch(handleRequestBuilder(currentFields))
+            }
+
+
         })
 
     } else {

@@ -18,6 +18,7 @@ function App() {
                 <Route exact={true} path="/" component={LandingPage} />
                 <Route path="/about" component={About} />
                 <Route path="/login" component={LoginFormContainer} />
+                <Route path="/signup" component={LoginFormContainer} />
 
 
             </Provider>

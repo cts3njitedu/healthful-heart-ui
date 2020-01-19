@@ -1,43 +1,73 @@
-import { LOGIN_PAGE_BEGIN, LOGIN_PAGE_SUCCESS, LOGIN_PAGE_FAILURE, LOGIN_FORM_CHANGE, LOGIN_FORM_VALIDATION_FINISH } from "../actions/loginAction";
+import { LOGIN_FORM_CHANGE, LOGIN_FORM_VALIDATION_FINISH, API_GET_LOGIN_PAGE_START, API_GET_LOGIN_PAGE_FAILURE, RESTRUCTURE_PAGE, LOGIN_FORM_SUBMIT_BEGIN, API_POST_LOGIN_PAGE_START, API_POST_LOGIN_PAGE_FAILURE } from "../actions/loginAction";
 
 const initialState = {
   page: {
+    errors: [],
     sections: [],
     validations: [],
     fields: []
   },
   loading: false,
-  error: null
+  error: null,
+  submitting: false,
+  pageTemplate: {},
+  submitError: null
 };
 
 export default function loginFormReducer(state = initialState, action) {
   console.log(action);
   switch (action.type) {
-    case LOGIN_PAGE_BEGIN:
+    case LOGIN_FORM_SUBMIT_BEGIN: 
       return {
         ...state,
+        submitting: true
+      }
+    case API_GET_LOGIN_PAGE_START:
+      return {
+        page:{},
         loading: true,
-        error: null
+        error: null,
+        submitting:false
       }
-    case LOGIN_PAGE_SUCCESS:
+    case API_POST_LOGIN_PAGE_START: 
       return {
         ...state,
-        loading: false,
-        page: action.payload.page
+        submitting: true
       }
-    case LOGIN_PAGE_FAILURE:
+    case API_GET_LOGIN_PAGE_FAILURE:
       return {
         ...state,
         loading: false,
         page: {},
-        error: action.payload.error
+        error: action.payload.error,
+      }
+    case API_POST_LOGIN_PAGE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        page: {
+          ...state.page,
+          errors: [...state.page.errors, action.payload.error.page.errors]
+        },
+        submitError: null,
+        submitting: false
+      }
+    case RESTRUCTURE_PAGE: 
+      return {
+        ...state,
+        loading: false,
+        submitting: false,
+        page: action.payload.page,
+        pageTemplate: action.payload.pageTemplate ,
+        submitError: null
       }
     case LOGIN_FORM_CHANGE:
       return {
         ...state,
         page: {
           ...state.page,
-          fields: state.page.fields.map((field, index) => {
+          errors: [],
+          fields: state.page.fields.map((field) => {
             if (field.id !== action.payload.field.id) {
                 return field;
             }
@@ -53,7 +83,8 @@ export default function loginFormReducer(state = initialState, action) {
         ...state,
         page: {
           ...state.page,
-          fields: state.page.fields.map((field,index) => {
+          errors: [],
+          fields: state.page.fields.map((field) => {
             if (field.id in action.payload.errorFields) {
               return {
                 ...field,
@@ -70,7 +101,10 @@ export default function loginFormReducer(state = initialState, action) {
       return {
         page: {},
         loading: false,
-        error: null
+        error: null,
+        submitting: false,
+        pageTemplate: {},
+        submitError: null
       }
   }
 }

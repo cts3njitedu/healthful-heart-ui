@@ -1,37 +1,47 @@
-import { getLoginPageFailure, LOGIN_PAGE_BEGIN, handleRestructurePage } from "../actions/loginAction";
+import { API_GET_LOGIN_PAGE, API_POST_LOGIN_PAGE } from "../actions/loginAction";
 import Axios from "axios";
 
-const getLoginPageApi = (store) => next => action => {
+const apiMiddleware = ({dispatch}) => next => action => {
 
-    console.log("Inside api login middleware", action);
-    if (action.type === LOGIN_PAGE_BEGIN) {
-        // store.dispatch(getLoginPageBegin());
-        //next(action)
-        return Axios.get("/api/login")
-            .then(res => {
-                const page = res.data;
-                next(handleRestructurePage(page));
-          
-            })
-            .catch(error => store.dispatch(getLoginPageFailure(error)));
+    if (action.type === API_GET_LOGIN_PAGE || action.type === API_POST_LOGIN_PAGE) {
+        const {
+            url,
+            method,
+            data,
+            onStart,
+            onSuccess,
+            onFailure,
+            headers
+        } = action.payload;
+    
+        const dataOrParams = ["GET", "DELETE"].includes(method) ? "params" : "data";
+    
+        Axios.defaults.headers.common["Content-Type"] = "application/json";
+        Axios.defaults.withCredentials = true
+        // Axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+        next(onStart());
+    
+        Axios.request({
+            url,
+            method,
+            headers,
+            [dataOrParams]: data,
+            headers: {
+                crossDomain: true
+            }
+        }).then(res => {
+            console.log("Succesfully completed")
+            next(onSuccess(res.data, res.headers));
+        }).catch(error => {
+            let response = error.response
 
+            dispatch(onFailure(response.status, response.data.page))
+        });
     } else {
-        next(action)
+        next(action);
     }
     
+
 }
-export default getLoginPageApi
+export default apiMiddleware
 
-
-// return (dispatch,getState,next) => {
-//     dispatch(getLoginPageBegin());
-//     return axios.get("/api/login")
-//         .then(res => {
-//             const page = res.data;
-//             restructurePage(page).then(function(newPage) {
-//                 dispatch(getLoginPageSuccess(newPage));
-//                 return newPage;
-//             })
-//         })
-//         .catch(error => dispatch(getLoginPageFailure(error)));
-// };

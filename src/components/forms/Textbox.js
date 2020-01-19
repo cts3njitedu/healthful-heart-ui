@@ -1,7 +1,6 @@
 import React from 'react'
 
 function Textbox(props) {
-    console.log("This is textbox", props);
     return (
         <div hidden={props.field.isHidden}>
             <label htmlFor={props.field.name}>{props.field.title}: </label> <span></span>
@@ -17,7 +16,8 @@ function Textbox(props) {
                 disabled={props.field.isDisabled}
                 pattern={props.field.regexValue}
                 required={props.field.isMandatory}
-                hidden={props.field.isHidden} />
+                hidden={props.field.isHidden}
+                size={props.field.maxLength}/>
             {props.field.errors.map((error) => <p key={error.message}>{error.message}</p>)}
         </div>
     )

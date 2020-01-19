@@ -1,11 +1,11 @@
-import { getLoginPageSuccess, RESTRUCTURE_PAGE } from "../actions/loginAction";
+import { getLoginPageSuccess, RESTRUCTURE_PAGE, API_GET_LOGIN_PAGE_SUCCESS, handleRestructurePage, API_POST_LOGIN_PAGE_FAILURE } from "../actions/loginAction";
 
-const restructurePageMiddleware = () => (next) => (action) => {
-    if (action.type === RESTRUCTURE_PAGE) {
+const restructurePageMiddleware = ({dispatch}) => (next) => (action) => {
+    if (action.type === API_GET_LOGIN_PAGE_SUCCESS || action.type === API_POST_LOGIN_PAGE_FAILURE ) {
         restructurePage(action.payload.page).then(function(newPage){
-            next(getLoginPageSuccess(newPage))
+            next(handleRestructurePage(newPage, action.payload.page))
         }) 
-    } else {
+    } else{
         next(action)
     }
 }
@@ -14,8 +14,9 @@ const restructurePageMiddleware = () => (next) => (action) => {
 export function restructurePage(page) {
     return new Promise(function(resolve){
         let newPage = {
+            errors: page.errors
         }
-        restructureSections(page.sections, newPage,page.pageId,"sections").then(function(np){
+        restructureSections(page.sections, newPage,"sections").then(function(np){
             console.log("This is new section:",np);
             resolve(np);
         });
@@ -23,11 +24,11 @@ export function restructurePage(page) {
     
 }
 
-function restructureSections(sections, newPage, parentId,parentName) {
+function restructureSections(sections, newPage, parentName) {
     return new Promise(function(resolve) {
         let promises = [];
         sections.forEach(section => {
-            promises.push(restructureSection(section,parentId, newPage, parentName));
+            promises.push(restructureSection(section, newPage, parentName));
         });
     
         Promise.all(promises).then(function () {
@@ -37,7 +38,7 @@ function restructureSections(sections, newPage, parentId,parentName) {
     
 }
 
-function restructureSection(section, parentId, newPage, parentName) {
+function restructureSection(section, newPage, parentName) {
     return new Promise(function (resolve) {
         let sectionPromises = [];
         let newSection = {};
@@ -53,13 +54,8 @@ function restructureSection(section, parentId, newPage, parentName) {
                     }
                     
                 } else {
-                    if (key === "sectionId" || key === "fieldId" || key === "validationId") {
-                        newSection = { ...newSection, [key]: section[key]}
-                        newSection = { ...newSection, id: parentId.concat(".").concat(section[key])}
-                        newSection = { ...newSection, parentId: parentId}
-                    } else {
-                        newSection = { ...newSection, [key]: section[key] }
-                    }
+                    
+                    newSection = { ...newSection, [key]: section[key] }
                 }
                 resolve();
             }))
@@ -72,7 +68,7 @@ function restructureSection(section, parentId, newPage, parentName) {
             newPage[parentName].push(newSection)
             let arrayPromises = []
             fieldArrays.forEach(key => {
-                arrayPromises.push(restructureSections(section[key],newPage, newSection.id,key))
+                arrayPromises.push(restructureSections(section[key],newPage,key))
             })
             Promise.all(arrayPromises).then(function(){
                 resolve(newPage);
