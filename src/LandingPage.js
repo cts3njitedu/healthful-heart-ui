@@ -16,6 +16,7 @@ const dummySentences = [
   ];
   
 function LandingPage() {
+    console.log("The healthful url is: ", process.env.REACT_APP_HEALTHFUL_HEART_URL)
     return (
         <Grid fluid={true}>
             <Row className="show-grid">
