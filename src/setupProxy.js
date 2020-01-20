@@ -4,7 +4,7 @@ module.exports = function(app) {
     app.use(
         '/api',
         proxy({
-            target: process.env.REACT_APP_HEALTHFUL_HEART_URL,
+            target: "https://healthful-heart-app.herokuapp.com",
             changeOrigin: true,
             pathRewrite: {
                 '^/api' : ""
