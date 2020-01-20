@@ -21,6 +21,7 @@ function relayRequestHeaders(proxyReq, req) {
     });
   }
 function relayResponseHeaders(proxyRes, req, res) {  
+    console.log(process.env.REACT_APP_HEALTHFUL_HEART_URL)
     Object.keys(proxyRes.headers).forEach(function (key) {
 
            res.append(key, proxyRes.headers[key]);
