@@ -1,10 +1,11 @@
-import { API_GET_LOGIN_PAGE, API_POST_LOGIN_PAGE } from "../actions/loginAction";
+import { API_GET_LOGIN_PAGE, API_POST_LOGIN_PAGE, API_POST_LOGOUT_PAGE } from "../actions/loginAction";
 import Axios from "axios";
 import { API_GET_ABOUT_PAGE } from "../actions/aboutAction";
 
 const apiMiddleware = ({dispatch}) => next => action => {
 
-    if (action.type === API_GET_LOGIN_PAGE || action.type === API_POST_LOGIN_PAGE || action.type === API_GET_ABOUT_PAGE) {
+    if (action.type === API_GET_LOGIN_PAGE || action.type === API_POST_LOGIN_PAGE || 
+        action.type === API_GET_ABOUT_PAGE || action.type === API_POST_LOGOUT_PAGE) {
         const {
             url,
             method,

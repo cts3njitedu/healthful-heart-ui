@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom'
 import "../styles/header.css"
 import { connect } from 'react-redux'
 function Navigation(props) {
-  const {isAccessTokenEnabled} = props
+  const { isAccessTokenEnabled } = props
   console.log("Navigation", isAccessTokenEnabled)
   return (
     <div>
@@ -23,14 +23,18 @@ function Navigation(props) {
               <Link to="/about" >About Page</Link>
             </NavItem>
           </Nav>
-          {!isAccessTokenEnabled ?<Nav pullRight>
+          {!isAccessTokenEnabled ? <Nav pullRight>
             <NavItem componentClass='span'>
               <Link to="/login">Login</Link>
-            </NavItem> 
+            </NavItem>
             <NavItem componentClass='span'>
               <Link to="/signup">Signup</Link>
-            </NavItem> 
-          </Nav>: null}
+            </NavItem>
+          </Nav> : <Nav pullRight>
+              <NavItem componentClass='span'>
+                <Link to="/logout">Logout</Link>
+              </NavItem>
+            </Nav>}
         </Navbar>
       </div>
 

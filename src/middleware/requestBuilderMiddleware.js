@@ -18,7 +18,7 @@ export const buildRequest = ({dispatch, getState}) => next => action => {
         })
 
         Promise.all(sectionPromises).then(function(){
-            dispatch(postLoginPage(pageTemplate))
+            dispatch(postLoginPage(pageTemplate, action.payload.page_url))
         })
     } else {
         next(action)

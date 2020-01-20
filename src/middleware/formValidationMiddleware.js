@@ -39,7 +39,7 @@ const validateForm = ({dispatch, getState}) => next => action => {
                 console.log("Login form validation returen")
                 next(handleFormValidationFinish(errors, isError))
             } else {
-                dispatch(handleRequestBuilder(currentFields))
+                dispatch(handleRequestBuilder(currentFields, action.payload.page_url))
             }
 
 

@@ -19,7 +19,10 @@ export const API_POST_LOGIN_PAGE = "API_POST_LOGIN_PAGE"
 export const API_POST_LOGIN_PAGE_START = "API_POST_LOGIN_PAGE_START"
 export const API_POST_LOGIN_PAGE_SUCCESS = "API_POST_LOGIN_PAGE_SUCCESS"
 export const API_POST_LOGIN_PAGE_FAILURE = "API_POST_LOGIN_PAGE_FAILURE"
-
+export const API_POST_LOGOUT_PAGE = "API_POST_LOGOUT_PAGE"
+export const API_POST_LOGOUT_PAGE_START = "API_POST_LOGOUT_PAGE_START"
+export const API_POST_LOGOUT_PAGE_SUCCESS = "API_POST_LOGOUT_PAGE_SUCCESS"
+export const API_POST_LOGOUT_PAGE_FAILURE = "API_POST_LOGOUT_PAGE_FAILURE"
 export function submit() {
     console.log("has submitted")
 }
@@ -28,9 +31,9 @@ export function handleChange() {
 
 
 }
-export const handleSubmit = (fields) => ({
+export const handleSubmit = (fields, page_url) => ({
     type: LOGIN_FORM_SUBMIT_BEGIN,
-    payload: {fields}
+    payload: {fields, page_url}
 
 })
 
@@ -45,7 +48,12 @@ export function getLoginPage(page_url) {
     });
 }
 
-
+export function postLogoutPage() {
+    return {
+        type: API_POST_LOGOUT_PAGE
+    }
+    
+}
 export const getLoginPageStart = () => ({
     type: API_GET_LOGIN_PAGE_START
 })
@@ -72,15 +80,25 @@ export const postLoginPageFailure = (error, page) => ({
     payload: { error,page}
 });
 
+export const postLogoutPageStart = () => ({
+    type: API_POST_LOGOUT_PAGE_START
+})
+export const postLogoutPageSuccess = () => ({
+    type: API_POST_LOGOUT_PAGE_SUCCESS
+});
+
+export const postLogoutPageFailure = () => ({
+    type: API_POST_LOGOUT_PAGE_FAILURE
+});
 export const handleFormChange = field => ({
     type: LOGIN_FORM_CHANGE,
     payload: { field }
 });
 
-export function postLoginPage (page) {
+export function postLoginPage (page, page_url) {
     return apiAction({
         type: API_POST_LOGIN_PAGE,
-        url: "/api/login",
+        url: "/api" + page_url,
         method: "POST",
         onStart: postLoginPageStart,
         onSuccess: postLoginPageSuccess,
@@ -100,9 +118,9 @@ export const handleFormBlur = fields => ({
     payload: { fields }
 })
 
-export const handleRequestBuilder = (fields) => ({
+export const handleRequestBuilder = (fields, page_url) => ({
     type: LOGIN_FORM_BUILD_REQUEST,
-    payload: {fields}
+    payload: {fields, page_url}
 })
 export const handleFormValidationFinish = (errorFields, isError) => ({
     type: LOGIN_FORM_VALIDATION_FINISH,

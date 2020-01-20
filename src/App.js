@@ -19,6 +19,7 @@ function App() {
                 <Route path="/about" component={About} />
                 <Route path="/login" component={LoginFormContainer} />
                 <Route path="/signup" component={LoginFormContainer} />
+                <Route path="/logout" component={LoginFormContainer} />
 
 
             </Provider>

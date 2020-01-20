@@ -1,4 +1,4 @@
-import { API_POST_LOGIN_PAGE_SUCCESS } from "../actions/loginAction"
+import { API_POST_LOGIN_PAGE_SUCCESS, API_POST_LOGOUT_PAGE_SUCCESS } from "../actions/loginAction"
 import { storeUserInfo } from "../actions/userAction"
 import { API_GET_ABOUT_PAGE_SUCCESS } from "../actions/aboutAction"
 
@@ -8,6 +8,8 @@ export const handleToken = ({dispatch, getState}) => next => action => {
         localStorage.setItem('accessToken', action.payload.header.token)
         dispatch(storeUserInfo())
         next(action)
+    } else if (action.type === API_POST_LOGOUT_PAGE_SUCCESS) {
+        localStorage.removeItem("accessToken")
     } else {
         next(action)
     }

@@ -16,9 +16,11 @@ class LoginFormContainer extends Component {
         }
     }
     componentDidMount() {
-    
-        this.props.getLoginPage(this.props.match.url);
-   
+        if (this.props.match.url === "/logout") {
+
+        } else {
+            this.props.getLoginPage(this.props.match.url);
+        }
         
     }
 
@@ -49,7 +51,7 @@ class LoginFormContainer extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.props.handleSubmit(this.state.fields)
+        this.props.handleSubmit(this.state.fields, this.props.match.url)
     }
     render(){
         const { error, loading, fields, submitting, submitError, pageErrors } = this.props;
