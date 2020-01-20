@@ -2,10 +2,13 @@ import React from 'react'
 import Header from './components/Header'
 import store from './store/index'
 import { Provider } from 'react-redux'
-import { BrowserRouter, Route } from 'react-router-dom'
-import About from './About'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import About from './components/About'
 import LandingPage from './LandingPage'
 import LoginFormContainer from './components/forms/LoginFormContainer'
+import PrivateRoute from './components/PrivateRoute'
+import Dashboard from './components/Dashboard'
+import PublicRoute from './components/PublicRoute'
 
 function App() {
     return (
@@ -15,11 +18,18 @@ function App() {
             <Provider store={store}>
                 <Header />
                 {/* <MainContent /> */}
-                <Route exact={true} path="/" component={LandingPage} />
-                <Route path="/about" component={About} />
-                <Route path="/login" component={LoginFormContainer} />
-                <Route path="/signup" component={LoginFormContainer} />
-                <Route path="/logout" component={LoginFormContainer} />
+                <Switch>
+                    <PublicRoute exact restricted = {false} path="/" component={LandingPage} />
+                    {/* <PrivateRoute exact path="/about">
+                        <About />
+                    </PrivateRoute> */}
+                    <PrivateRoute component={About} path="/about" exact />
+                    <PrivateRoute component={Dashboard} path="/dashboard" exact />
+                    <PublicRoute key="login-user" path="/login" restricted={true} component={LoginFormContainer} exact/>
+                    <PublicRoute key="signup-user" path="/signup" restricted={true} component={LoginFormContainer} exact />
+                    <Route path="/logout" component={LoginFormContainer} />
+                </Switch>
+
 
 
             </Provider>

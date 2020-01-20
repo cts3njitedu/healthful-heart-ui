@@ -1,4 +1,4 @@
-import { STORE_USER_INFO } from "../actions/userAction";
+import { STORE_USER_INFO, REMOVE_USER_INFO } from "../actions/userAction";
 
 const initialState = {
 
@@ -7,22 +7,29 @@ const initialState = {
 
 export default function userReducer(state = initialState, action) {
     console.log(action);
-    let isPresent = localStorage.getItem("accessToken") !=null;
-    console.log("In user store: ", isPresent)
+
     switch (action.type) {
       case STORE_USER_INFO: 
+      localStorage.setItem('accessToken', action.payload.user.accessToken)
        return {
            ...state,
     
-            isAccessTokenEnabled: isPresent
+            isAccessTokenEnabled: localStorage.getItem('accessToken') || false
             
 
        }
+       case REMOVE_USER_INFO:
+        localStorage.removeItem('accessToken')
+       return {
+         ...state,
+         isAccessTokenEnabled: false
+       }
+          
       default:
         // ALWAYS have a default case in a reducer
         return {
      
-              isAccessTokenEnabled: isPresent
+              isAccessTokenEnabled: localStorage.getItem('accessToken') || false
       
         }
     }

@@ -4,7 +4,6 @@ import rootReducer from '../reducers/rootReducer'
 import restructurePageMiddleware from '../middleware/restructurePageMiddleware';
 import validateForm from '../middleware/formValidationMiddleware';
 import {buildRequest} from '../middleware/requestBuilderMiddleware';
-import thunk from 'redux-thunk';
 import { handleToken } from '../middleware/handleTokenMiddleware';
 
 const store = createStore(rootReducer, 

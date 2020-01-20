@@ -1,4 +1,4 @@
-import { LOGIN_FORM_CHANGE, LOGIN_FORM_VALIDATION_FINISH, API_GET_LOGIN_PAGE_START, API_GET_LOGIN_PAGE_FAILURE, RESTRUCTURE_PAGE, LOGIN_FORM_SUBMIT_BEGIN, API_POST_LOGIN_PAGE_START, API_POST_LOGIN_PAGE_FAILURE } from "../actions/loginAction";
+import { LOGIN_FORM_CHANGE, LOGIN_FORM_VALIDATION_FINISH, API_GET_LOGIN_PAGE_START, API_GET_LOGIN_PAGE_FAILURE, RESTRUCTURE_PAGE, LOGIN_FORM_SUBMIT_BEGIN, API_POST_LOGIN_PAGE_START, API_POST_LOGIN_PAGE_FAILURE, API_POST_LOGIN_PAGE_SUCCESS } from "../actions/loginAction";
 
 const initialState = {
   page: {
@@ -11,7 +11,8 @@ const initialState = {
   error: null,
   submitting: false,
   pageTemplate: {},
-  submitError: null
+  submitError: null,
+  submitted: false
 };
 
 export default function loginFormReducer(state = initialState, action) {
@@ -52,6 +53,12 @@ export default function loginFormReducer(state = initialState, action) {
         submitError: null,
         submitting: false
       }
+    case API_POST_LOGIN_PAGE_SUCCESS:
+      return {
+        ...state,
+        submitted: true,
+        submitting: false
+      }
     case RESTRUCTURE_PAGE: 
       return {
         ...state,
@@ -59,7 +66,8 @@ export default function loginFormReducer(state = initialState, action) {
         submitting: false,
         page: action.payload.page,
         pageTemplate: action.payload.pageTemplate ,
-        submitError: null
+        submitError: null,
+        submitted: false
       }
     case LOGIN_FORM_CHANGE:
       return {
@@ -104,7 +112,8 @@ export default function loginFormReducer(state = initialState, action) {
         error: null,
         submitting: false,
         pageTemplate: {},
-        submitError: null
+        submitError: null,
+        submitted: false
       }
   }
 }

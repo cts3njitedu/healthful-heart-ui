@@ -2,7 +2,8 @@ import { API_GET_ABOUT_PAGE_SUCCESS, API_GET_ABOUT_PAGE_FAILURE, API_GET_ABOUT_P
 
 const initialState = {
 
-    loading: false
+    loading: false,
+    error: false
   };
 
 export default function aboutReducer(state = initialState, action) {
@@ -11,7 +12,7 @@ export default function aboutReducer(state = initialState, action) {
         case API_GET_ABOUT_PAGE_FAILURE:
             return {
                 ...state,
-                loading: true
+                loading: false
             }
         case API_GET_ABOUT_PAGE_SUCCESS: 
             return {
@@ -21,13 +22,14 @@ export default function aboutReducer(state = initialState, action) {
         case API_GET_ABOUT_PAGE_START: 
             return {
                 ...state, 
-                loading: false
+                loading: true
             }
       default:
         // ALWAYS have a default case in a reducer
         return {
      
-              loading: false
+              loading: false,
+              error: false
       
         }
     }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import LoginFormComponent from './LoginFormComponent';
 import { convertLoginFields } from '../../selectors/loginFormSelector';
 import {isEqual} from 'lodash'
+import Loading from '../Loading';
 class LoginFormContainer extends Component {
 
     constructor(props){
@@ -19,13 +20,14 @@ class LoginFormContainer extends Component {
         if (this.props.match.url === "/logout") {
 
         } else {
+            console.log("This is the url:", this.props.match.url)
             this.props.getLoginPage(this.props.match.url);
         }
         
     }
 
     componentDidUpdate (prevProps) {
-        if (localStorage.getItem("accessToken")!=null){
+        if (localStorage.getItem("accessToken")) {
             this.props.history.push("/")
         }
         if (!isEqual(prevProps.fields, this.props.fields)) {
@@ -43,7 +45,7 @@ class LoginFormContainer extends Component {
     }
 
     handleBlur(event) {
-        const {name, value, id} = event.target
+        const {name} = event.target
         this.props.handleFormBlur({
             [name]: this.state.fields[name]
         });
@@ -54,24 +56,24 @@ class LoginFormContainer extends Component {
         this.props.handleSubmit(this.state.fields, this.props.match.url)
     }
     render(){
-        const { error, loading, fields, submitting, submitError, pageErrors } = this.props;
-        
+        const { error, loading, fields, submitting, pageErrors,submitted } = this.props;
         if (submitting) {
             return (
                 <div>Submitting...</div>
             )
         }
-        if (loading) {
+        else if (loading) {
             return (
-                <div>Loading...</div>
+                <Loading />
             )
         }
-        if (error) {
+        else if (error) {
             return (
                 <div>Error getting page...</div>
             )
         }
         else{
+            console.log("Has submitted: ", submitted)
             if (fields !== null) {
                 console.log("State has changed: ", this.state.fields)
                 return (
@@ -90,7 +92,7 @@ class LoginFormContainer extends Component {
                 )
             }
             return(
-                <div>Still haven't recieved all data...</div>
+                <Loading />
             )
         }
     }
@@ -110,7 +112,8 @@ function mapStateToProps(state) {
            error: state.loginForm.error,
            submitting: state.loginForm.submitting,
            submitError: state.loginForm.submitError,
-           pageErrors: state.loginForm.page.errors
+           pageErrors: state.loginForm.page.errors,
+           submitted: state.loginForm.submitted
         }
         
 }

@@ -1,6 +1,6 @@
-import { getLoginPageSuccess, RESTRUCTURE_PAGE, API_GET_LOGIN_PAGE_SUCCESS, handleRestructurePage, API_POST_LOGIN_PAGE_FAILURE } from "../actions/loginAction";
+import { API_GET_LOGIN_PAGE_SUCCESS, handleRestructurePage, API_POST_LOGIN_PAGE_FAILURE } from "../actions/loginAction";
 
-const restructurePageMiddleware = ({dispatch}) => (next) => (action) => {
+const restructurePageMiddleware = () => (next) => (action) => {
     if (action.type === API_GET_LOGIN_PAGE_SUCCESS || action.type === API_POST_LOGIN_PAGE_FAILURE ) {
         restructurePage(action.payload.page).then(function(newPage){
             next(handleRestructurePage(newPage, action.payload.page))

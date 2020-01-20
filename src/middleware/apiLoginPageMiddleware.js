@@ -41,8 +41,8 @@ const apiMiddleware = ({dispatch}) => next => action => {
             next(onSuccess(res.data, res.headers));
         }).catch(error => {
             let response = error.response
-            // console.log("What action is here: ", action, error)
-            dispatch(onFailure(response.status, response.data.page))
+            console.log("What action is here: ", response)
+            dispatch(onFailure(response, response.data.page))
         });
     } else {
         next(action);
