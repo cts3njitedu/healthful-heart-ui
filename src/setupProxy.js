@@ -21,7 +21,7 @@ function relayRequestHeaders(proxyReq, req) {
     });
   }
 function relayResponseHeaders(proxyRes, req, res) {
-    console.log(proxyRes.headers)
+    // console.log(proxyRes.headers)
     // if (proxyRes.headers['set-cookie'] != null) {
     //     var cookie = proxyRes.headers['set-cookie']
     //     var access_token = cookie[0]

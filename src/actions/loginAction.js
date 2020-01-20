@@ -1,3 +1,4 @@
+import apiAction from "./apiAction"
 
 export const LOGIN_FORM_SUBMIT_BEGIN = "LOGIN_FORM_SUBMIT_BEGIN"
 export const LOGIN_FORM_SUBMIT_SUCCESS = "LOGIN_FORM_SUBMIT_SUCCESS"
@@ -32,35 +33,6 @@ export const handleSubmit = (fields) => ({
     payload: {fields}
 
 })
-
-function apiAction({
-    type = "",
-    url = "",
-    method = "GET",
-    data = null,
-    accessToken = null,
-    onSuccess = () => { },
-    onFailure = () => { },
-    onStart = () => { },
-    label = "",
-    headersOverride = null
-}) {
-    return {
-        type: type,
-        payload: {
-            url,
-            method,
-            data,
-            accessToken,
-            onSuccess,
-            onFailure,
-            label,
-            headersOverride,
-            onStart
-
-        }
-    };
-}
 
 export function getLoginPage(page_url) {
     return apiAction({
