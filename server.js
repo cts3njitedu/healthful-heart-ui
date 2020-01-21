@@ -30,9 +30,9 @@ app.get('/ping', function (req, res) {
 
 app.get('/api/*', function (req, res) {
   let newUrl = req.url.replace(/^(\/api)/, "");
-
+  console.log("This is the server:",process.env.REACT_APP_HEALTHFUL_HEART_URL)
   axios.request({
-    url: "http://localhost:8000" + newUrl,
+    url: process.env.REACT_APP_HEALTHFUL_HEART_URL + newUrl,
     method: "get",
     headers: req.headers 
   }).then(response => {
