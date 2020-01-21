@@ -46,10 +46,9 @@ app.get('/api/*', function (req, res) {
 
 app.post('/api/*', function (req, res) {
   let newUrl = req.url.replace(/^(\/api)/, "");
-  console.log(process.env.REACT_APP_HEALTHFUL_HEART_URL)
-  console.log(req.headers)
+
   axios.request({
-    url: "http://localhost:8000" + newUrl,
+    url: process.env.REACT_APP_HEALTHFUL_HEART_URL + newUrl,
     method: "post" 
   }).then(response => {
     console.log(response.headers)
