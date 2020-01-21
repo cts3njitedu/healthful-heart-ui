@@ -36,9 +36,11 @@ app.get('/api/*', function (req, res) {
     method: "get",
     headers: req.headers 
   }).then(response => {
+    console.log(response)
     return res.json(response.data)
     
   }).catch(error => {
+    console.log(error)
     return res.json(error)
   });
   
