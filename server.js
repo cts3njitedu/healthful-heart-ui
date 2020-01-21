@@ -32,7 +32,7 @@ app.get('/api/*', function (req, res) {
   let newUrl = req.url.replace(/^(\/api)/, "");
   console.log("This is the server:",process.env.REACT_APP_HEALTHFUL_HEART_URL)
   axios.request({
-    url: process.env.REACT_APP_HEALTHFUL_HEART_URL + newUrl,
+    url: "https://healthful-heart-app.herokuapp.com/login",
     method: "get",
     headers: req.headers 
   }).then(response => {
