@@ -36,24 +36,8 @@ app.get('/api/*', function (req, res) {
     method: "get",
     headers: req.headers 
   }).then(response => {
-    console.log(response)
-    return res.json(response.data)
-    
-  }).catch(error => {
-    console.log(error)
-    return res.json(error)
-  });
-  
-})
-
-app.post('/api/*', function (req, res) {
-  let newUrl = req.url.replace(/^(\/api)/, "");
-
-  axios.request({
-    url: process.env.REACT_APP_HEALTHFUL_HEART_URL + newUrl,
-    method: "post" 
-  }).then(response => {
     console.log(response.headers)
+    console.log(response.data)
     return res.json(response.data)
     
   }).catch(error => {
@@ -62,8 +46,26 @@ app.post('/api/*', function (req, res) {
   });
   
 })
+
+// app.post('/api/*', function (req, res) {
+//   let newUrl = req.url.replace(/^(\/api)/, "");
+
+//   axios.request({
+//     url: process.env.REACT_APP_HEALTHFUL_HEART_URL + newUrl,
+//     method: "post" 
+//   }).then(response => {
+//     console.log(response.headers)
+//     return res.json(response.data)
+    
+//   }).catch(error => {
+//     console.log(error)
+//     return res.json(error)
+//   });
+  
+// })
 // if (process.env.NODE_ENV === 'production') {
 app.get('*', function (req, res) {
+  if (req)
   console.log("This is generic", req.url)
   app.use(express.static("build"));
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
