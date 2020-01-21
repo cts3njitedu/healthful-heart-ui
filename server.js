@@ -32,7 +32,7 @@ app.get('/api/*', function (req, res) {
   let newUrl = req.url.replace(/^(\/api)/, "");
   console.log("This is the server:", process.env.REACT_APP_HEALTHFUL_HEART_URL)
   var options = {
-    host: "https://healthful-heart-app.herokuapp.com",
+    host: "healthful-heart-app.herokuapp.com",
     path: "/login",
     method: "GET"
 
