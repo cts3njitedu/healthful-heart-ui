@@ -31,20 +31,20 @@ app.get('/ping', function (req, res) {
 app.get('/api/*', function (req, res) {
   let newUrl = req.url.replace(/^(\/api)/, "");
   console.log("This is the server:",process.env.REACT_APP_HEALTHFUL_HEART_URL)
-  // axios.request({
-  //   url: "https://healthful-heart-app.herokuapp.com/login",
-  //   method: "get",
-  //   headers: req.headers 
-  // }).then(response => {
-  //   console.log(response.headers)
-  //   console.log(response.data)
-  //   return res.json(response.data)
+  axios.request({
+    url: "https://healthful-heart-app.herokuapp.com/login",
+    method: "get",
+    headers: req.headers 
+  }).then(response => {
+    console.log(response.headers)
+    console.log(response.data)
+    res.json(response.data)
     
-  // }).catch(error => {
-  //   console.log(error)
-  //   return res.json(error)
-  // });
-  res.json({"message": "successful"})
+  }).catch(error => {
+    console.log(error)
+    res.json(error)
+  });
+  
 })
 
 // app.post('/api/*', function (req, res) {
