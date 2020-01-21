@@ -41,7 +41,7 @@ app.get('/api/*', function (req, res) {
   
     response.setEncoding('utf8');
     response.on('data', function (chunk) {
-        res.status(response.statusCode).json(chunk)
+        res.status(response.statusCode).json(JSON.parse(chunk))
     });
   }).end();
 
