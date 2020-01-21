@@ -37,15 +37,14 @@ app.get('/api/*', function (req, res) {
     method: "GET"
 
   }
-  http.request(options, function (res) {
-    console.log('STATUS: ' + res.statusCode);
-    console.log('HEADERS: ' + JSON.stringify(res.headers));
-    res.setEncoding('utf8');
-    res.on('data', function (chunk) {
-      console.log('BODY: ' + chunk);
+  http.request(options, function (response) {
+  
+    response.setEncoding('utf8');
+    response.on('data', function (chunk) {
+        res.status(response.statusCode).json(chunk)
     });
   }).end();
-  res.json({"message":"Hello World"})
+
 })
 
 // app.post('/api/*', function (req, res) {
