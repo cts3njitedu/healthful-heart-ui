@@ -1,25 +1,12 @@
 const express = require('express');
 const favicon = require('express-favicon');
 const path = require('path');
-const port = process.env.PORT || 8080;
 const app = express();
-const proxy = require('http-proxy-middleware')
-const axios = require('axios')
-const http = require("http")
-require('dotenv').config()
-// module.exports = function(app) {
-//   app.use(
-//       '/api',
-//       proxy({
-//           target: "http://localhost:5000",
-//           changeOrigin: true,
-//           pathRewrite: {
-//               '^/api' : ""
-//           },
-//           secure: false
-//       })
-//   )
-// }
+const http = require("http");
+const dotenv = require('dotenv');
+dotenv.config();
+const request = require('request');
+
 app.use(favicon(__dirname + '/build/favicon.ico'));
 // the __dirname is the current directory from where the script is running
 app.use(express.static(__dirname));
@@ -31,19 +18,25 @@ app.get('/ping', function (req, res) {
 app.get('/api/*', function (req, res) {
   let newUrl = req.url.replace(/^(\/api)/, "");
   console.log("This is the server:", process.env.REACT_APP_HEALTHFUL_HEART_URL)
+  console.log("This is the url:", newUrl)
+  console.log(process.env.NODE_ENV);
+  let requestPort = process.env.NODE_ENV ? null : 8000;
   var options = {
-    host: "healthful-heart-app.herokuapp.com",
-    path: "/login",
-    method: "GET"
+    host: process.env.REACT_APP_HEALTHFUL_HEART_URL,
+    port: requestPort,
+    path: newUrl
 
   }
-  http.request(options, function (response) {
-  
+  http.get(options, function (response) {
+    let data = "";
     response.setEncoding('utf8');
-    response.on('data', function (chunk) {
-        res.status(response.statusCode).json(JSON.parse(chunk))
-    });
-  }).end();
+    response.on('data', function(d){
+      data += d
+    })
+    response.on('end', function(){
+      res.json(JSON.parse(data))
+    })
+  })
 
 })
 

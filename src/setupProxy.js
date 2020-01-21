@@ -4,7 +4,7 @@
 //     app.use(
 //         '/api',
 //         proxy({
-//             target: "https://healthful-heart.herokuapp.com",
+//             target: "http://localhost:5000",
 //             changeOrigin: true,
 //             pathRewrite: {
 //                 '^/api' : ""
