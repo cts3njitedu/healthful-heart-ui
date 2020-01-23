@@ -35,7 +35,9 @@ app.get('/api/*', function (req, res) {
   })
 
 })
-
+app.get('/login', function(req, res) {
+  console.log("Why are you here!!!!!!");
+})
 // app.post('/api/*', function (req, res) {
 //   let newUrl = req.url.replace(/^(\/api)/, "");
 
