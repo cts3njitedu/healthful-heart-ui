@@ -22,20 +22,16 @@ app.get('/api/*', function (req, res) {
   console.log(process.env.NODE_ENV);
   let requestPort = process.env.NODE_ENV ? null : 8000;
   var options = {
-    host: process.env.REACT_APP_HEALTHFUL_HEART_URL,
-    port: requestPort,
-    path: newUrl
+    url: process.env.REACT_APP_HEALTHFUL_HEART_URL + newUrl,
+    method: "GET",
+    headers: req.headers
 
   }
-  http.get(options, function (response) {
-    let data = "";
-    response.setEncoding('utf8');
-    response.on('data', function(d){
-      data += d
-    })
-    response.on('end', function(){
-      res.json(JSON.parse(data))
-    })
+  request(options, function(err, response, body) {
+    let json = JSON.parse(body);
+    console.log(response.headers);
+    console.log(json)
+    res.status(response.statusCode).json(json)
   })
 
 })
